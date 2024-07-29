@@ -58,7 +58,8 @@ const select = {
       thisProduct.id = id;
       thisProduct.data = data;
       thisProduct.renderInMenu();
-      console.log('new Product:', thisProduct);
+      thisProduct.initAccordion();
+      // console.log('new Product:', thisProduct);
     }
     renderInMenu() {
       const thisProduct = this;
@@ -72,15 +73,36 @@ const select = {
       /* add element to menu */
       menuContainer.appendChild(thisProduct.element);
     }
+    initAccordion() {
+      const thisProduct = this;
+
+      /* find the clickable trigger (the element that should react to clicking) */
+      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      // console.log(clickableTrigger)
+      /* START: add event listener to clickable trigger on event click */
+      clickableTrigger.addEventListener('click', function(event) {
+      /* prevent default action for event */
+        event.preventDefault();
+      /* find active product (product that has active class) */
+        const activeProducts = document.querySelectorAll(select.all.menuProductsActive);
+        // console.log(activeProducts);
+      /* if there is active product and it's not thisProduct.element, remove class active from it */for (let activeProduct of activeProducts) {
+        if (activeProduct !== thisProduct.element) {
+          activeProduct.classList.remove('active');
+          }
+        }
+      /* toggle active class on thisProduct.element */
+        thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
+      });
+    }
   }
 
   const app = {
     initMenu: function () {
       const thisApp = this;
 
-      console.log('thisApp.data:', thisApp.data);
-      // const testProduct = new Product();
-      // console.log('testProduct:', testProduct);
+      // console.log('thisApp.data:', thisApp.data);
+
       for (let productData in thisApp.data.products) {
         new Product(productData, thisApp.data.products[productData]);
       }
@@ -88,15 +110,15 @@ const select = {
     initData: function () {
       const thisApp = this;
 
-      thisApp.data = dataSource;
+      thisApp.data = dataSource; // data.js
     },
     init: function(){
       const thisApp = this;
-      console.log('*** App starting ***');
-      console.log('thisApp:', thisApp);
-      console.log('classNames:', classNames);
-      console.log('settings:', settings);
-      console.log('templates:', templates);
+      // console.log('*** App starting ***');
+      // console.log('thisApp:', thisApp);
+      // console.log('classNames:', classNames);
+      // console.log('settings:', settings);
+      // console.log('templates:', templates);
       thisApp.initData();
       thisApp.initMenu();
     },
