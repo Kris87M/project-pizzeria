@@ -71,6 +71,11 @@ const settings = {
   cart: {
     defaultDeliveryFee: 20,
   },
+  db: {
+  url: '//localhost:3131',
+  products: 'products',
+  orders: 'orders',
+  },
 };
 
 const templates = {
@@ -397,7 +402,6 @@ const templates = {
       } else {
         thisCart.totalPrice = subtotalPrice + deliveryFee;
       }
-      console.log(this)
       // console.log({ deliveryFee }, { totalNumber }, { subtotalPrice }, thisCart.totalPrice)
       thisCart.dom.deliveryFee.innerHTML = deliveryFee;
       thisCart.dom.subtotalPrice.innerHTML = subtotalPrice;
@@ -450,13 +454,27 @@ const templates = {
       // console.log('thisApp.data:', thisApp.data);
       
       for (let productData in thisApp.data.products) {
-        new Product(productData, thisApp.data.products[productData]);
+        new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
       }
     },
     initData: function () {
       const thisApp = this;
       
-      thisApp.data = dataSource; // data.js
+      thisApp.data = {};
+      const url = settings.db.url + '/' + settings.db.products;
+      // console.log(url)
+      fetch(url)
+        .then(function (rawResponse) {
+          return rawResponse.json();
+        })
+        .then(function (parsedResponse) {
+          // console.log('parsedResponse', parsedResponse);
+          // save parsedResponse as thisApp.data.products
+          thisApp.data.products = parsedResponse;
+          // execute initMenu method
+          thisApp.initMenu();
+        });
+      // console.log('thisApp.data', JSON.stringify(thisApp.data));
     },
     init: function(){
       const thisApp = this;
@@ -466,7 +484,7 @@ const templates = {
       // console.log('settings:', settings);
       // console.log('templates:', templates);
       thisApp.initData();
-      thisApp.initMenu();
+      // thisApp.initMenu();
       thisApp.initCart();
     },
     initCart: function () {
