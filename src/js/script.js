@@ -94,7 +94,6 @@ const templates = {
       thisProduct.initOrderForm();
       thisProduct.initAmountWidget();
       thisProduct.processOrder();
-      // console.log(thisProduct.data);
       // console.log('new Product:', thisProduct);
     }
     renderInMenu() {
@@ -177,7 +176,6 @@ const templates = {
 
     processOrder() {
       const thisProduct = this;
-      // console.log(thisProduct.processOrder)
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.form);
       // console.log('formData', formData);
@@ -421,13 +419,23 @@ const templates = {
     }
     remove(cartProduct) {
       const thisCart = this;
-      // console.log(cartProduct)
+      console.log(cartProduct)
       cartProduct.dom.wrapper.remove();
       const indexOfRemovedProduct = thisCart.products.indexOf(cartProduct);
       // console.log('index - removed product', indexOfRemovedProduct);
       thisCart.products.splice(indexOfRemovedProduct, 1);
       // console.log('products', thisCart.products);
       thisCart.update();
+    }
+    clearCart() {
+      const thisCart = this;
+      for (let product of thisCart.products) {
+        product.dom.wrapper.remove();
+      }
+      thisCart.products = [];
+      thisCart.update();
+      thisCart.dom.address.value = '';
+      thisCart.dom.phone.value = '';
     }
     sendOrder() {
       const thisCart = this;
@@ -459,6 +467,7 @@ const templates = {
         }).then(function (parsedResponse) {
           console.log('parsedResponse', parsedResponse);
         });
+      this.clearCart();
     }
   }
   
