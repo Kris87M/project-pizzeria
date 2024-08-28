@@ -10,6 +10,7 @@ class Booking {
         thisBooking.render(element);
         thisBooking.initWidgets();
         thisBooking.getData();
+        thisBooking.selectedTable = [];
     }
     getData() {
         const thisBooking = this;
@@ -142,6 +143,32 @@ class Booking {
         }
     }
 
+    initTables(event) {
+        const thisBooking = this;
+        const selectedTarget = event.target;
+        // console.log(event);
+        if (selectedTarget.classList.contains('table')) {
+            if (selectedTarget.classList.contains('booked')) {
+                alert('Booked. Choose another table.');
+            } else {
+                thisBooking.clearSelectedTable();
+                selectedTarget.classList.add('selected');
+                thisBooking.selectedTable.push(selectedTarget.dataset.table);
+                console.log(selectedTarget.dataset.table, thisBooking.selectedTable);
+            }
+        }
+    }
+
+    clearSelectedTable() {
+        const thisBooking = this;
+        for (let table of thisBooking.dom.tables) {
+            if (table.classList.contains('selected')) {
+                table.classList.remove('selected');
+            }
+        }
+        thisBooking.selectedTable = [];
+    }
+
     render(element) {
         const thisBooking = this;
         const generatedHTML = templates.bookingWidget();
@@ -156,6 +183,8 @@ class Booking {
         thisBooking.dom.hourPicker = document.querySelector(select.widgets.hourPicker.wrapper);
 
         thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
+        thisBooking.dom.floor = thisBooking.dom.wrapper.querySelector(select.booking.floor);
+        // console.log(thisBooking.dom.floor)
     }
     initWidgets() {
         const thisBooking = this;
@@ -165,9 +194,13 @@ class Booking {
         thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
         thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
 
-        thisBooking.dom.wrapper.addEventListener('updated', function () {
+        thisBooking.dom.wrapper.addEventListener('updated', function (event) {
             thisBooking.updateDOM();
+            thisBooking.clearSelectedTable(event);
         });
+        thisBooking.dom.floor.addEventListener('click', function (event) {
+            thisBooking.initTables(event);
+        })
     }
 }
 
