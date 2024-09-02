@@ -75,6 +75,11 @@ $base-size: 12px;
   opacity: 1;
 }
 
+@mixin transition() {
+  transform: translateY(-40%);
+  transition: all 1s;
+}
+
 /* Helpers */
 
 .no-spacing {
