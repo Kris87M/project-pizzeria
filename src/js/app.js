@@ -9,6 +9,8 @@ const app = {
     const thisApp = this;
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
     thisApp.navLinks = document.querySelectorAll(select.nav.links);
+    // thisApp.blockLinks = document.querySelectorAll('.block__header');
+    // console.log(thisApp.blockLinks)
 
     const idFromHash = window.location.hash.replace('#/', '');
     let pageMatchingHash = thisApp.pages[0].id;
@@ -48,6 +50,23 @@ const app = {
       );
     }
   },
+  initLinks: function () {
+    const thisApp = this;
+    thisApp.links = document.querySelectorAll('.block__link');
+    // console.log(thisApp.links)
+    for (let link of thisApp.links) {
+      // console.log(link)
+      link.addEventListener('click', function (event) {
+        event.preventDefault();
+        const clickedElement = this;
+        // console.log(clickedElement)
+        const id = clickedElement.getAttribute('href').replace('#', '');
+        // console.log(id)
+        thisApp.activatePage(id);
+        window.location.hash = `#/${id}`;
+      })
+    }
+  },
   initMenu: function () {
       const thisApp = this;
       
@@ -83,12 +102,13 @@ const app = {
     // console.log('classNames:', classNames);
     // console.log('settings:', settings);
     // console.log('templates:', templates);
+    thisApp.initHome();
     thisApp.initPages();
+    thisApp.initLinks();
     thisApp.initData();
     // thisApp.initMenu();
     thisApp.initCart();
     thisApp.initBooking();
-    thisApp.initHome();
   },
   initCart: function () {
       const thisApp = this;
@@ -108,7 +128,7 @@ const app = {
   initHome: function () {
     const thisApp = this;
     const homeWrapper = document.querySelector(select.containerOf.home);
-    console.log(homeWrapper);
+    // console.log(homeWrapper);
     thisApp.home = new Home(homeWrapper);
   }
 };
