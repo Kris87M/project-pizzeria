@@ -56,10 +56,10 @@ const app = {
     // console.log(thisApp.links)
     for (let link of thisApp.links) {
       // console.log(link)
-      link.addEventListener('click', function (event) {
+      link.parentElement.addEventListener('click', function (event) {
         event.preventDefault();
-        const clickedElement = this;
-        // console.log(clickedElement)
+        const clickedElement = this.children[0];
+        console.log(this.children)
         const id = clickedElement.getAttribute('href').replace('#', '');
         // console.log(id)
         thisApp.activatePage(id);

@@ -151,10 +151,13 @@ class Booking {
             if (selectedTarget.classList.contains('booked')) {
                 alert('Booked. Choose another table.');
             } else {
-                thisBooking.clearSelectedTable();
-                selectedTarget.classList.add('selected');
-                thisBooking.selectedTable.push(selectedTarget.dataset.table);
-                // console.log(selectedTarget.dataset.table, thisBooking.selectedTable);
+                if (selectedTarget.classList.contains('selected')) {
+                    thisBooking.clearSelectedTable();
+                } else {
+                    selectedTarget.classList.add('selected');
+                    thisBooking.selectedTable.push(selectedTarget.dataset.table);
+                    // console.log(selectedTarget.dataset.table, thisBooking.selectedTable);
+                }
             }
         }
     }
